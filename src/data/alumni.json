@@ -1,0 +1,46 @@
+{
+  "alumni": [
+    {
+      "name": "Jackson Spencer",
+      "school": "Herriman High School",
+      "year": "2025",
+      "badge": "Course Record · 15:02",
+      "bio": "Gatorade National Boys Cross Country Player of the Year (2025–26) and Nike Cross Nationals champion. Spencer swept both premier national XC titles, went undefeated all season, and set the all-time course record at Woodward Park (14:16). He holds the Timpanogos Invitational boys course record (15:02) and is committed to BYU."
+    },
+    {
+      "name": "Jane Hedengren",
+      "school": "Timpview High School",
+      "year": "2024 & 2025",
+      "badge": "Course Record · 17:38",
+      "bio": "Gatorade National Girls Cross Country Player of the Year (2024–25), Nike Cross Nationals champion, and three-time Utah 5A state champion. Hedengren set U.S. high school records in the 5,000m (15:13) and the mile (4:26). She is the two-time individual champion at the Timpanogos Invitational and holds the girls course record (17:38). Now competing at BYU."
+    },
+    {
+      "name": "Daniel Simmons",
+      "school": "American Fork High School",
+      "year": "2023",
+      "badge": "",
+      "bio": "Two-time Gatorade National Boys Cross Country Player of the Year (2022–23 and 2023–24) — only the third athlete ever to win back-to-back. Simmons set the U.S. high school indoor 5,000m record (13:38) and the outdoor 5,000m national record (13:25). He was a two-time Utah 6A state champion and two-time NXR Southwest champion, and signed with BYU."
+    },
+    {
+      "name": "Rory Linkletter",
+      "school": "Herriman High School",
+      "year": "2013",
+      "badge": "",
+      "bio": "2013 Timpanogos Invitational individual champion. Linkletter became one of Canada's greatest distance runners — a 2024 Paris Olympian, two-time World Championships marathoner, and Canadian half marathon record holder (59:49). A six-time All-American at BYU, he owns the second-fastest marathon time in Canadian history (2:06:49)."
+    },
+    {
+      "name": "Raygan Peterson",
+      "school": "Timpanogos High School",
+      "year": "2022",
+      "badge": "",
+      "bio": "2023 national champion in the girls 2,000m steeplechase at Nike Outdoor Nationals, run at Hayward Field in Eugene. Peterson was also an All-American in 2022, a cross country state champion (2021), and a multiple-time 4x400 and 4x800 state champion. She now runs cross country and track at BYU."
+    },
+    {
+      "name": "Tayson Echohawk",
+      "school": "Orem High School",
+      "year": "2022",
+      "badge": "",
+      "bio": "2022 Timpanogos Invitational individual champion and Utah 5A state champion. Echohawk ran the fastest 5,000m by a Utah high school runner at the time (14:24), was a two-time NXR Southwest runner-up, and earned All-American honors at RunningLane Nationals. He went on to run cross country at the University of Oregon."
+    }
+  ]
+}

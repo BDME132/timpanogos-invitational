@@ -1,0 +1,32 @@
+{
+  "individual": [
+    { "year": 2025, "boysWinner": "Jackson Spencer",   "boysSchool": "Herriman",        "girlsWinner": "Bridget Smit",     "girlsSchool": "Brighton" },
+    { "year": 2024, "boysWinner": "Kaden Evans",       "boysSchool": "American Fork",   "girlsWinner": "Jane Hedengren",   "girlsSchool": "Timpview" },
+    { "year": 2023, "boysWinner": "Daniel Simmons",    "boysSchool": "American Fork",   "girlsWinner": "Adria Favero",     "girlsSchool": "Olympus" },
+    { "year": 2022, "boysWinner": "Tayson Echohawk",   "boysSchool": "Orem",            "girlsWinner": "Avalon Mecham",    "girlsSchool": "American Fork" },
+    { "year": 2021, "boysWinner": "Jayden Fitzgerald", "boysSchool": "American Fork",   "girlsWinner": "Addi Bruening",    "girlsSchool": "Herriman" },
+    { "year": 2020, "boysWinner": "Brayden Packard",   "boysSchool": "American Fork",   "girlsWinner": "Caila Odekirk",    "girlsSchool": "Hurricane" },
+    { "year": 2019, "boysWinner": "Christopher Korir", "boysSchool": "Wasatch Academy", "girlsWinner": "Eliza Mason",      "girlsSchool": "Lone Peak" },
+    { "year": 2018, "boysWinner": "Drake DeHaan",      "boysSchool": "West Jordan",     "girlsWinner": "Helena Miyazawa",  "girlsSchool": "Mountain View" },
+    { "year": 2017, "boysWinner": "Justin Hartshorn",  "boysSchool": "Lone Peak",       "girlsWinner": "Helena Miyazawa",  "girlsSchool": "Mountain View" },
+    { "year": 2016, "boysWinner": "Joseph Benson",     "boysSchool": "Timpanogos",      "girlsWinner": "Madison Moffitt",  "girlsSchool": "Timpanogos" },
+    { "year": 2015, "boysWinner": "William Handley",   "boysSchool": "Timpanogos",      "girlsWinner": "Britney Lund",     "girlsSchool": "Maple Mountain" },
+    { "year": 2014, "boysWinner": "Dakota Lange",      "boysSchool": "Payson",          "girlsWinner": "Lucy Biles",       "girlsSchool": "Herriman" },
+    { "year": 2013, "boysWinner": "Rory Linkletter",   "boysSchool": "Herriman",        "girlsWinner": "Lucy Biles",       "girlsSchool": "Herriman" }
+  ],
+  "team": [
+    { "year": 2025, "boys": "American Fork", "girls": "Lone Peak" },
+    { "year": 2024, "boys": "Herriman",      "girls": "Lone Peak" },
+    { "year": 2023, "boys": "Herriman",      "girls": "Lone Peak" },
+    { "year": 2022, "boys": "Herriman",      "girls": "American Fork" },
+    { "year": 2021, "boys": "Mountain View", "girls": "American Fork" },
+    { "year": 2020, "boys": "American Fork", "girls": "American Fork" },
+    { "year": 2019, "boys": "Timpanogos",    "girls": "Lone Peak" },
+    { "year": 2018, "boys": "Lone Peak",     "girls": "Lone Peak" },
+    { "year": 2017, "boys": "Timpanogos",    "girls": "Lone Peak" },
+    { "year": 2016, "boys": "Timpanogos",    "girls": "Timpanogos" },
+    { "year": 2015, "boys": "Timpanogos",    "girls": "Timpview" },
+    { "year": 2014, "boys": "Timpanogos",    "girls": "Herriman" },
+    { "year": 2013, "boys": "Timpanogos",    "girls": "Timpanogos" }
+  ]
+}

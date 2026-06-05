@@ -1,0 +1,518 @@
+---
+import Layout from '../layouts/Layout.astro';
+import meet from '../data/meet.json';
+import schedule from '../data/schedule.json';
+import records from '../data/records.json';
+import champions from '../data/champions.json';
+import alumniData from '../data/alumni.json';
+import resultsArchiveData from '../data/results-archive.json';
+const alumni = alumniData.alumni;
+const resultsArchive = resultsArchiveData.years;
+import { getCollection } from 'astro:content';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const logoUrl = `${base}/logo.jpg`;
+
+const news = (await getCollection('news', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+
+const phoneDigits = meet.contact.phone.replace(/\D/g, '');
+const ccPhoneDigits = '8016108175';
+---
+
+<Layout>
+  <!-- NAV -->
+  <nav>
+    <a href="#home"><img src={logoUrl} alt="Timpanogos Invitational" class="nav-logo-img" /></a>
+    <ul class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#info">Race Info</a>
+      <a href="#records">Records</a>
+      <a href="#results">Results</a>
+      {news.length > 0 && <a href="#news">News</a>}
+      <a href="#register">Register</a>
+      <a href="#about">About</a>
+    </ul>
+    <div class="nav-hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-stripes"></div>
+    <svg class="hero-mountain" viewBox="0 0 1440 260" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M0,260 L0,200 L120,120 L200,160 L320,60 L420,140 L520,40 L600,100 L720,0 L820,80 L920,30 L1020,110 L1120,50 L1240,130 L1360,80 L1440,120 L1440,260 Z"
+        fill="white"
+      />
+    </svg>
+
+    <div class="hero-year-badge">{meet.heroBadge}</div>
+
+    <img src={logoUrl} alt="Timpanogos Invitational" class="hero-logo-img" />
+
+    <h1 class="hero-title">
+      Timpanogos<br /><span class="accent">Invitational</span>
+    </h1>
+    <p class="hero-subtitle">{meet.tagline}</p>
+
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Date</div>
+        <div class="hero-meta-value">{meet.raceDate}</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Location</div>
+        <div class="hero-meta-value">{meet.venueShort}</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Distance</div>
+        <div class="hero-meta-value">{meet.distance}</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Sessions</div>
+        <div class="hero-meta-value" set:html={meet.sessions.replace('&', '&amp;')}></div>
+      </div>
+    </div>
+
+    <div class="hero-ctas">
+      <a href={meet.registration.am} target="_blank" class="btn-primary">Register — AM Session</a>
+      <a
+        href={meet.registration.pm}
+        target="_blank"
+        class="btn-primary"
+        style="background:var(--navy);color:var(--white);border:2px solid var(--green);"
+      >
+        Register — PM Session
+      </a>
+      <a href="#info" class="btn-secondary">Race Information</a>
+    </div>
+
+    <div class="hero-countdown" id="countdown" data-race={meet.raceDateISO}>
+      <div class="countdown-item">
+        <span class="countdown-num" id="cd-days">--</span><span class="countdown-label">Days</span>
+      </div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-item">
+        <span class="countdown-num" id="cd-hours">--</span><span class="countdown-label">Hours</span>
+      </div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-item">
+        <span class="countdown-num" id="cd-mins">--</span><span class="countdown-label">Min</span>
+      </div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-item">
+        <span class="countdown-num" id="cd-secs">--</span><span class="countdown-label">Sec</span>
+      </div>
+    </div>
+
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      Scroll
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stats-inner">
+      {meet.stats.map((s, i) => (
+        <div class={`stat-item reveal reveal-delay-${i + 1}`}>
+          <div class="stat-num">{s.num}</div>
+          <div class="stat-label">{s.label}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- RACE INFO -->
+  <section id="info" class="section-dark">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" style="color:var(--green);">{meet.year} Meet</div>
+        <h2 class="section-title light">Race Information</h2>
+        <div class="divider"></div>
+      </div>
+
+      <div class="info-grid">
+        <!-- LEFT -->
+        <div>
+          <div class="info-block">
+            <h3>Date &amp; Location</h3>
+            <p>{meet.raceDate} · {meet.raceTime}</p>
+            <p>{meet.venue}<br />{meet.address}</p>
+          </div>
+
+          <div class="info-block">
+            <h3>AM Session Schedule</h3>
+            <table class="schedule-table">
+              <thead>
+                <tr><th>Time</th><th>Event</th></tr>
+              </thead>
+              <tbody>
+                {schedule.am.map((e) => (
+                  <tr class={e.varsity ? 'varsity-row' : ''}>
+                    <td>{e.time}</td>
+                    <td>{e.event}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="info-block">
+            <h3>PM Session Schedule</h3>
+            <table class="schedule-table">
+              <thead>
+                <tr><th>Time</th><th>Event</th></tr>
+              </thead>
+              <tbody>
+                {schedule.pm.map((e) => (
+                  <tr class={e.varsity ? 'varsity-row' : ''}>
+                    <td>{e.time}</td>
+                    <td>{e.event}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div>
+          <div class="info-block">
+            <h3>The Course</h3>
+            <p>{meet.course}</p>
+            <div class="course-map-container" style="margin-top:1rem;">
+              <div class="course-map-placeholder">[Course Map — Replace with image]</div>
+              <p style="font-size:0.75rem;color:rgba(255,255,255,0.3);margin-top:0.5rem;font-family:'Oswald',sans-serif;letter-spacing:0.1em;">
+                {meet.courseMapCaption}
+              </p>
+            </div>
+          </div>
+
+          <div class="info-block">
+            <h3>Awards</h3>
+            <ul>
+              {meet.awards.map((a) => (
+                <li>
+                  {a.includes('sb3.runnercard.com') ? (
+                    <Fragment>
+                      Live scoreboard at <a href={meet.scoreboardUrl} target="_blank" style="color:var(--green);">sb3.runnercard.com</a>
+                    </Fragment>
+                  ) : (
+                    a
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="info-block">
+            <h3>Entry Fees</h3>
+            <div class="fees-card">
+              <h4>Standard Entry</h4>
+              <p style="white-space:pre-line;">{meet.fees.standard}</p>
+            </div>
+            <div class="fees-card">
+              <h4>Payment</h4>
+              <p>
+                Checks payable to <strong style="color:var(--white);">Timpanogos High School</strong><br />
+                Bring day-of or mail to: 1450 N. 200 E, Orem, UT 84057<br />
+                Credit card: Call <a href={`tel:${ccPhoneDigits}`} style="color:var(--green);">801-610-8175</a> ext. 365<br />
+                Online: <a href="https://www.myschoolfees.com" target="_blank" style="color:var(--green);">myschoolfees.com</a> → Timpanogos High
+              </p>
+            </div>
+          </div>
+
+          <div class="info-block">
+            <h3>Parking &amp; Logistics</h3>
+            <ul>
+              {meet.logistics.map((l) => <li>{l}</li>)}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECORDS -->
+  <section id="records">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <div class="section-eyebrow">All-Time</div>
+        <h2 class="section-title">Course Records &amp; Champions</h2>
+        <div class="divider"></div>
+      </div>
+
+      <div class="records-grid">
+        <div class="record-card reveal reveal-delay-1">
+          <div class="record-label">Boys Varsity Course Record</div>
+          <div class="record-time">{records.boys.time}</div>
+          <div class="record-name">{records.boys.name}</div>
+          <div class="record-meta">{records.boys.school}</div>
+        </div>
+        <div class="record-card reveal reveal-delay-2">
+          <div class="record-label">Girls Varsity Course Record</div>
+          <div class="record-time">{records.girls.time}</div>
+          <div class="record-name">{records.girls.name}</div>
+          <div class="record-meta">{records.girls.school}</div>
+        </div>
+      </div>
+
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab-btn="ind-champs">Individual Champions</button>
+        <button class="tab-btn" data-tab-btn="team-champs">Team Champions</button>
+      </div>
+
+      <div data-tab-content="ind-champs" class="tab-content active">
+        <table class="champs-table">
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th>Boys Winner</th>
+              <th>School</th>
+              <th>Girls Winner</th>
+              <th>School</th>
+            </tr>
+          </thead>
+          <tbody>
+            {champions.individual.map((c) => (
+              <tr>
+                <td class="year-col">{c.year}</td>
+                <td>{c.boysWinner}</td>
+                <td>{c.boysSchool}</td>
+                <td>{c.girlsWinner}</td>
+                <td>{c.girlsSchool}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div data-tab-content="team-champs" class="tab-content">
+        <table class="champs-table">
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th>Boys Team Champion</th>
+              <th>Girls Team Champion</th>
+            </tr>
+          </thead>
+          <tbody>
+            {champions.team.map((c) => (
+              <tr>
+                <td class="year-col">{c.year}</td>
+                <td>{c.boys}</td>
+                <td>{c.girls}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p style="font-size:0.8rem;color:#999;margin-top:1rem;font-style:italic;">
+          Full results available in the results archive.
+        </p>
+      </div>
+
+      <div style="margin-top:4rem;">
+        <div class="section-eyebrow">Notable Alumni</div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--navy);margin-bottom:0.5rem;">
+          Champions Who Raced Here
+        </h3>
+        <div class="divider"></div>
+        <div class="alumni-grid">
+          {alumni.map((a, i) => (
+            <div class={`alumni-card reveal reveal-delay-${(i % 5) + 1}`}>
+              {a.badge && <div class="alumni-badge">{a.badge}</div>}
+              <div class="alumni-name">{a.name}</div>
+              <div class="alumni-school">{a.school} · {a.year}</div>
+              <div class="alumni-bio">{a.bio}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="section-dark">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <div class="section-eyebrow" style="color:var(--green);">Archive</div>
+        <h2 class="section-title light">Past Results</h2>
+        <div class="divider"></div>
+      </div>
+
+      <div class="scoreboard-banner">
+        <p>🔴 Live Race Scoreboard — Race Day</p>
+        <a href={meet.scoreboardUrl} target="_blank" class="btn-primary">View Live Scores</a>
+      </div>
+
+      <p style="color:rgba(255,255,255,0.6);font-size:0.9rem;margin-bottom:1.5rem;font-style:italic;">
+        Click a year to view full results on MileSplit or RunnerCard.
+      </p>
+
+      <div class="results-years">
+        {resultsArchive.map((r) => (
+          <a href={r.url} target="_blank" class="year-btn">{r.year}</a>
+        ))}
+      </div>
+
+      <p class="results-note">
+        The Timpanogos Invitational has been held annually since 2010. Full results for most years are archived on
+        <a href="https://ut.milesplit.com" target="_blank">MileSplit Utah</a> and
+        <a href="https://www.runnercard.com" target="_blank">RunnerCard</a>.
+      </p>
+    </div>
+  </section>
+
+  {news.length > 0 && (
+    <section id="news" class="section-alt">
+      <div class="section-inner">
+        <div class="section-header reveal">
+          <div class="section-eyebrow">Latest</div>
+          <h2 class="section-title">News &amp; Announcements</h2>
+          <div class="divider"></div>
+        </div>
+        <div class="news-grid">
+          {news.map((post) => (
+            <article class="news-card">
+              <div class="news-date">
+                {post.data.date.toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </div>
+              <h3 class="news-title">{post.data.title}</h3>
+              {post.data.summary && <p class="news-summary">{post.data.summary}</p>}
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- REGISTER -->
+  <section id="register" class="section-alt">
+    <div class="section-inner">
+      <div class="section-eyebrow" style="justify-content:center;">{meet.year} Season</div>
+      <h2 class="section-title" style="text-align:center;">Register Your Team</h2>
+      <div class="divider" style="margin:1.5rem auto;"></div>
+      <p style="text-align:center;font-size:1rem;line-height:1.8;color:#555;max-width:600px;margin:0 auto 2rem;">
+        Registration for the {meet.year} Timpanogos Invitational is handled through RunnerCard. Sign up one runner to reserve your team's spot — each session is limited to 45 teams, so register early.
+      </p>
+
+      <div class="register-details">
+        <div class="reg-detail">
+          <h4>Registration Deadline</h4>
+          <p>{meet.registration.deadline}<br />{meet.registration.deadlineTime}</p>
+        </div>
+        <div class="reg-detail">
+          <h4>Session Limits</h4>
+          <p>{meet.registration.sessionLimit}<br />AM &amp; PM sessions available</p>
+        </div>
+        <div class="reg-detail">
+          <h4>Entry Fee</h4>
+          <p>{meet.registration.entryFee}<br />{meet.registration.entryFeeSmall}</p>
+        </div>
+        <div class="reg-detail">
+          <h4>Entries</h4>
+          <p set:html={meet.registration.entriesNote.replace(' — ', '<br />').replace('&', '&amp;')}></p>
+        </div>
+      </div>
+
+      <div style="text-align:center;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a
+          href={meet.registration.am}
+          target="_blank"
+          class="btn-primary"
+          style="font-size:1rem;padding:1.1rem 2.2rem;"
+        >
+          Register — AM Session →
+        </a>
+        <a
+          href={meet.registration.pm}
+          target="_blank"
+          class="btn-primary"
+          style="font-size:1rem;padding:1.1rem 2.2rem;background:var(--navy);color:var(--white);border:2px solid var(--navy);"
+        >
+          Register — PM Session →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT / CONTACT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <div class="section-eyebrow">Since 2010</div>
+        <h2 class="section-title">About the Meet</h2>
+        <div class="divider"></div>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-text">
+          {meet.about.map((p) => <p>{p}</p>)}
+        </div>
+
+        <div>
+          <div class="contact-card">
+            <h3>Contact</h3>
+            <div class="contact-item">
+              <div class="contact-label">Meet Director</div>
+              <div class="contact-value">{meet.contact.director}</div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-label">Phone / Cell</div>
+              <div class="contact-value"><a href={`tel:${phoneDigits}`}>{meet.contact.phone}</a></div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-label">Email</div>
+              <div class="contact-value"><a href={`mailto:${meet.contact.email}`}>{meet.contact.email}</a></div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-label">Host School</div>
+              <div class="contact-value" style="white-space:pre-line;">{meet.contact.school + '\n' + meet.contact.schoolAddress}</div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-label">Registration</div>
+              <div class="contact-value">
+                <a href={meet.registration.am} target="_blank">AM Session</a> ·
+                <a href={meet.registration.pm} target="_blank">PM Session</a>
+              </div>
+            </div>
+            <div style="margin-top:1.5rem;">
+              <a href={`mailto:${meet.contact.email}`} class="btn-primary" style="display:block;text-align:center;">
+                Email Meet Director
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Timpanogos <span>Invitational</span></div>
+    <div class="footer-sub">{meet.tagline} · Est. 2010 · Orem, Utah</div>
+    <div class="footer-links">
+      <a href="#home">Home</a>
+      <a href="#info">Race Info</a>
+      <a href="#records">Records</a>
+      <a href="#results">Results</a>
+      <a href="#register">Register</a>
+      <a href="#about">Contact</a>
+    </div>
+    <div class="footer-copy">
+      Hosted by Timpanogos High School · Alpine School District · Questions: {meet.contact.email}
+    </div>
+  </footer>
+</Layout>
