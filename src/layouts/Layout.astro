@@ -6,6 +6,8 @@ interface Props {
 }
 
 const { title = 'Timpanogos Invitational Cross Country' } = Astro.props;
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <!DOCTYPE html>
@@ -14,6 +16,11 @@ const { title = 'Timpanogos Invitational Cross Country' } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
+    <meta
+      name="description"
+      content="Timpanogos Invitational Cross Country meet — race information, schedule, course records, results, and registration."
+    />
+    <link rel="icon" type="image/jpeg" href={`${base}/logo.jpg`} />
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Oswald:wght@400;500;600;700&display=swap"
       rel="stylesheet"
