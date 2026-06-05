@@ -19,7 +19,7 @@ That's a one-time thing. After that, you just log in whenever you want to make a
 
 ## Making a change
 
-1. Go to **https://bdme132.github.io/timpanogos-invitational/admin/**
+1. Go to **https://timpanogos-invitational.vercel.app/admin/**
 2. Click **Sign in with GitHub** (enter your GitHub login if it asks).
 3. You'll see the content sections in a menu. Pick what you want to change:
 

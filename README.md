@@ -3,8 +3,8 @@
 A static [Astro](https://astro.build/) site for the Timpanogos Invitational cross country meet.
 It builds to plain HTML and deploys automatically to **GitHub Pages**.
 
-- **Live site:** https://bdme132.github.io/timpanogos-invitational/
-- **Admin (content editor):** https://bdme132.github.io/timpanogos-invitational/admin/
+- **Live site:** https://timpanogos-invitational.vercel.app/ (update once you know the real URL)
+- **Admin (content editor):** https://timpanogos-invitational.vercel.app/admin/
 - **Repo:** `BDME132/timpanogos-invitational`
 
 There is **no server and no database** — and nothing to pay for. Every deploy is a free GitHub
@@ -43,8 +43,8 @@ step that only the repo owner can do (it can't be scripted).
    (https://github.com/settings/developers).
 2. Fill in:
    - **Application name:** `Timpanogos Invitational CMS`
-   - **Homepage URL:** `https://bdme132.github.io/timpanogos-invitational/`
-   - **Authorization callback URL:** `https://bdme132.github.io/timpanogos-invitational/admin/`
+   - **Homepage URL:** `https://timpanogos-invitational.vercel.app/`  ← use your real Vercel URL
+   - **Authorization callback URL:** `https://timpanogos-invitational.vercel.app/admin/`  ← same
 3. Click **Register application**.
 4. Copy the **Client ID** shown on the next screen. (You do **not** need a client secret —
    Sveltia uses the secret-less PKCE flow.)
