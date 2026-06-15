@@ -7,20 +7,15 @@ You'll use a simple web page with fill-in-the-blank forms.
 
 ## First time only
 
-You need a free GitHub account, and the meet's website owner needs to add you as an editor.
-
-1. Make a GitHub account at **https://github.com/join** (free).
-2. Tell the website owner your GitHub username. They'll send you an invite — click the link in
-   the email to accept it.
-
-That's a one-time thing. After that, you just log in whenever you want to make a change.
+Ask the meet's website owner for the **admin password**. That's the only thing you need — there's
+no account to create. After that, you just log in whenever you want to make a change.
 
 ---
 
 ## Making a change
 
 1. Go to **https://timpanogos-invitational.vercel.app/admin/**
-2. Click **Sign in with GitHub** (enter your GitHub login if it asks).
+2. Click **Sign in**, then enter the admin password.
 3. You'll see the content sections in a menu. Pick what you want to change:
 
    | Section | What it controls |
@@ -35,7 +30,7 @@ That's a one-time thing. After that, you just log in whenever you want to make a
 
 4. Edit the fields, then click **Save** / **Publish**.
 5. Wait about a minute, then refresh the live site —
-   **https://bdme132.github.io/timpanogos-invitational/** — to see your change.
+   **https://timpanogos-invitational.vercel.app/** — to see your change.
 
 ---
 

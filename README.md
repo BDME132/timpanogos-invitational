@@ -1,15 +1,16 @@
 # Timpanogos Invitational website
 
-A static [Astro](https://astro.build/) site for the Timpanogos Invitational cross country meet.
-It builds to plain HTML and deploys automatically to **GitHub Pages**.
+A mostly-static [Astro](https://astro.build/) site for the Timpanogos Invitational cross country
+meet. It builds to plain HTML and deploys to **Vercel**, with one small serverless function that
+powers the password-protected admin.
 
-- **Live site:** https://timpanogos-invitational.vercel.app/ (update once you know the real URL)
+- **Live site:** https://timpanogos-invitational.vercel.app/
 - **Admin (content editor):** https://timpanogos-invitational.vercel.app/admin/
 - **Repo:** `BDME132/timpanogos-invitational`
 
-There is **no server and no database** — and nothing to pay for. Every deploy is a free GitHub
-Pages build. Content edits are made through the admin page (or by editing the data files directly)
-and committed to the repo, which triggers an automatic rebuild.
+There is **no database**. Content edits are made through the admin page (or by editing the data
+files directly) and committed to the repo, which triggers an automatic Vercel rebuild. The only
+server-side code is `api/oauth.js`, which checks the admin password.
 
 > **Editing the site day-to-day?** You don't need anything in this file. See **[EDITING.md](./EDITING.md)**
 > for the simple, click-by-click guide.
@@ -24,55 +25,46 @@ and committed to the repo, which triggers an automatic rebuild.
 | Editable content | `src/data/*.json` | meet details, schedule, records, champions, alumni, results archive |
 | News posts | `src/content/news/*.md` | one markdown file per post |
 | Admin UI | `public/admin/` | [Sveltia CMS](https://github.com/sveltia/sveltia-cms) — a form editor that commits to this repo |
-| Deploy | `.github/workflows/deploy.yml` | builds on every push to `main`, publishes to GitHub Pages |
+| Admin login | `api/oauth.js` | serverless function: checks the shared password, hands the CMS a server-held GitHub token |
+| Deploy | Vercel | builds and publishes on every push to `main` |
 
-The admin is a browser-only CMS: the editor signs in **with GitHub**, edits content through forms,
-and clicking *Publish* commits the change. GitHub Actions then rebuilds and the site updates in
-about a minute.
+The admin is a browser-based CMS. The editor signs in **with the shared admin password**, edits
+content through forms, and clicking *Publish* commits the change. Vercel then rebuilds and the site
+updates in about a minute.
 
 ---
 
 ## One-time setup (required before the admin login works)
 
-The admin page is built, but logging in needs a GitHub OAuth App. This is a ~5-minute, one-time
-step that only the repo owner can do (it can't be scripted).
+The admin login is gated by a single shared password, checked by a small serverless function
+(`api/oauth.js`) on Vercel. Setup is two environment variables — only the repo owner needs to do
+this, and it's a ~5-minute, one-time step.
 
-### 1. Create the GitHub OAuth App
+### 1. Create a GitHub token for the server to commit with
 
-1. Go to **GitHub → Settings → Developer settings → OAuth Apps → New OAuth App**
-   (https://github.com/settings/developers).
-2. Fill in:
-   - **Application name:** `Timpanogos Invitational CMS`
-   - **Homepage URL:** `https://timpanogos-invitational.vercel.app/`  ← use your real Vercel URL
-   - **Authorization callback URL:** `https://timpanogos-invitational.vercel.app/admin/`  ← same
-3. Click **Register application**.
-4. Copy the **Client ID** shown on the next screen. (You do **not** need a client secret —
-   Sveltia uses the secret-less PKCE flow.)
+1. Go to **GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens**
+   (https://github.com/settings/tokens?type=beta) → **Generate new token**.
+2. Set:
+   - **Repository access:** Only select repositories → `BDME132/timpanogos-invitational`
+   - **Permissions:** Repository permissions → **Contents: Read and write**
+3. Generate it and copy the token (`github_pat_…`). GitHub shows it only once.
 
-### 2. Add the Client ID to the site
+### 2. Add the secrets to Vercel
 
-In `public/admin/config.yml`, replace the placeholder:
+In the Vercel project: **Settings → Environment Variables**, add (see `.env.example`):
 
-```yaml
-backend:
-  name: github
-  repo: BDME132/timpanogos-invitational
-  branch: main
-  auth_type: pkce
-  app_id: PASTE_YOUR_CLIENT_ID_HERE   # <-- replace REPLACE_WITH_GITHUB_OAUTH_APP_CLIENT_ID
-```
+| Name | Value |
+|------|-------|
+| `ADMIN_PASSWORD` | the password you want coaches to type at `/admin` |
+| `GITHUB_TOKEN`   | the fine-grained token from step 1 |
 
-Commit and push. The admin login will work once GitHub Pages rebuilds.
+Redeploy (or push a commit) so the function picks them up. Also confirm the Vercel project is
+**connected to this GitHub repo**, so CMS edits (which are commits) trigger an auto-rebuild.
 
-### 3. Give the editor access
+### 3. Give an editor access
 
-The editor signs in with GitHub, so they need:
-
-- A free GitHub account (https://github.com/join).
-- To be added as a **collaborator** on the repo:
-  **GitHub → repo → Settings → Collaborators → Add people**, then they accept the email invite.
-
-That's it — from then on they just use the admin page.
+Just give them the **admin password and the admin URL** — no GitHub account, no invites. To revoke
+access for everyone at once, change `ADMIN_PASSWORD` (and rotate `GITHUB_TOKEN`) and redeploy.
 
 ---
 
@@ -87,8 +79,10 @@ pnpm build        # produce a production build in dist/
 pnpm preview      # serve the production build locally
 ```
 
-The admin page's GitHub login only works on the deployed site (the OAuth callback URL points
-there), but you can edit the JSON/markdown files directly during local development.
+The admin login talks to the serverless function, so it only works where that function runs: the
+deployed site, or locally via `vercel dev` with `ADMIN_PASSWORD` and `GITHUB_TOKEN` set in a local
+`.env` (see `.env.example`). During plain `pnpm dev` you can still edit the JSON/markdown files
+directly.
 
 ## Assets to add
 

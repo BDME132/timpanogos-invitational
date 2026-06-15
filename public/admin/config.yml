@@ -2,10 +2,11 @@ backend:
   name: github
   repo: BDME132/timpanogos-invitational
   branch: main
-  # Sveltia CMS uses PKCE OAuth — no backend proxy server required.
-  # The user must create a GitHub OAuth App and paste the Client ID here.
-  auth_type: pkce
-  app_id: Ov23lilpFv2ELZTx8gH6
+  # Custom auth: coaches sign in with a single shared password instead of GitHub.
+  # base_url + auth_endpoint point the CMS at our Vercel function (api/oauth.js),
+  # which checks ADMIN_PASSWORD and hands back a server-held GITHUB_TOKEN.
+  base_url: https://timpanogos-invitational.vercel.app
+  auth_endpoint: api/oauth
 
 # Media uploads land in /public/ so they're served at the site root.
 media_folder: public
