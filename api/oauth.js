@@ -125,6 +125,41 @@ export default async function handler(req, res) {
     return;
   }
 
+  // TEMPORARY diagnostic: GET /api/oauth?diag=1 reports whether the server-held
+  // token can reach the repo, without ever exposing the token itself. Remove once
+  // the admin login is confirmed working.
+  const url = new URL(req.url || '/', 'http://localhost');
+  if (req.method === 'GET' && url.searchParams.get('diag') === '1') {
+    let repoStatus = 0;
+    let message = '';
+    try {
+      const r = await fetch('https://api.github.com/repos/BDME132/timpanogos-invitational', {
+        headers: {
+          Authorization: `Bearer ${githubToken}`,
+          Accept: 'application/vnd.github+json',
+          'User-Agent': 'timpinvite-admin',
+        },
+      });
+      repoStatus = r.status;
+      const body = await r.json().catch(() => ({}));
+      message = body.message || body.full_name || '';
+    } catch (e) {
+      message = `fetch failed: ${e.message}`;
+    }
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({
+      tokenType: githubToken.startsWith('github_pat_') ? 'fine-grained'
+        : githubToken.startsWith('ghp_') ? 'classic'
+        : githubToken.startsWith('ghs_') ? 'app-installation'
+        : 'unknown',
+      tokenLength: githubToken.length,
+      repoStatus,
+      message,
+    }, null, 2));
+    return;
+  }
+
   if (req.method === 'POST') {
     const form = await readForm(req);
     if (passwordMatches(form.password, adminPassword)) {
