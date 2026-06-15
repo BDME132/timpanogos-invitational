@@ -1,12 +1,387 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="noindex" />
-    <title>Timpanogos Invitational — Admin</title>
-  </head>
-  <body>
-    <script type="module" src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
-  </body>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Timpanogos Invitational — Admin</title>
+  <style>
+    :root { --green:#1f6f43; --green-dark:#195c38; --navy:#11261a; --line:#d8e0db; --muted:#5a6a60; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; color:var(--navy); background:#f3f6f4; }
+    button { font: inherit; cursor: pointer; border-radius:8px; border:1px solid var(--line); background:#fff; padding:.5rem .8rem; }
+    button.primary { background:var(--green); color:#fff; border-color:var(--green); font-weight:600; }
+    button.primary:hover { background:var(--green-dark); }
+    button.danger { color:#b00020; border-color:#e6c0c6; }
+    button:disabled { opacity:.5; cursor:default; }
+    input, textarea, select { width:100%; font:inherit; padding:.5rem .6rem; border:1px solid var(--line); border-radius:8px; background:#fff; }
+    textarea { min-height:5rem; resize:vertical; }
+    label { font-weight:600; font-size:.85rem; display:block; margin-bottom:.3rem; }
+
+    /* login */
+    #login { min-height:100vh; display:grid; place-items:center; background:var(--navy); }
+    #login form { background:#fff; padding:2rem; border-radius:12px; width:min(92vw,360px); box-shadow:0 12px 40px rgba(0,0,0,.35); }
+    #login h1 { margin:0 0 .25rem; font-size:1.2rem; }
+    #login p { margin:0 0 1.25rem; color:var(--muted); font-size:.9rem; }
+    .err { color:#b00020; font-size:.85rem; min-height:1.1em; margin:.4rem 0 0; }
+
+    /* app */
+    #app { display:none; min-height:100vh; grid-template-columns:240px 1fr; }
+    aside { background:var(--navy); color:#dfe8e2; padding:1.2rem .8rem; }
+    aside h2 { font-size:1rem; margin:.2rem .4rem 1rem; color:#fff; }
+    nav button { display:block; width:100%; text-align:left; background:transparent; border:0; color:#cdd8d1; padding:.55rem .6rem; border-radius:8px; }
+    nav button:hover { background:rgba(255,255,255,.08); color:#fff; }
+    nav button.active { background:var(--green); color:#fff; font-weight:600; }
+    aside .logout { margin-top:1.5rem; }
+    aside .logout button { color:#cdd8d1; border-color:rgba(255,255,255,.2); background:transparent; width:100%; }
+
+    main { padding:1.5rem 2rem; max-width:880px; }
+    .head { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:1rem; }
+    .head h1 { font-size:1.4rem; margin:0; }
+    .field { margin-bottom:1rem; }
+    .hint { color:var(--muted); font-size:.78rem; margin-top:.25rem; }
+    fieldset { border:1px solid var(--line); border-radius:10px; padding:1rem; margin-bottom:1rem; background:#fff; }
+    legend { font-weight:700; padding:0 .4rem; }
+    .list-item { border:1px solid var(--line); border-radius:10px; padding:.9rem; margin-bottom:.7rem; background:#fbfdfc; position:relative; }
+    .list-item .row-tools { position:absolute; top:.5rem; right:.5rem; display:flex; gap:.25rem; }
+    .list-item .row-tools button { padding:.15rem .45rem; font-size:.8rem; }
+    .checkbox { display:flex; align-items:center; gap:.5rem; }
+    .checkbox input { width:auto; }
+    .save-bar { position:sticky; bottom:0; background:#f3f6f4; padding:1rem 0; display:flex; gap:.7rem; align-items:center; border-top:1px solid var(--line); margin-top:1rem; }
+    .status { font-size:.9rem; color:var(--muted); }
+    .status.ok { color:var(--green); } .status.bad { color:#b00020; }
+    .news-list .post { display:flex; justify-content:space-between; align-items:center; padding:.7rem .9rem; border:1px solid var(--line); border-radius:10px; margin-bottom:.6rem; background:#fff; cursor:pointer; }
+    .news-list .post:hover { border-color:var(--green); }
+    .badge { font-size:.72rem; background:#eef3ef; color:var(--muted); border-radius:999px; padding:.1rem .5rem; }
+    .badge.draft { background:#fdeccd; color:#7a5a12; }
+    .loading { color:var(--muted); padding:2rem 0; }
+  </style>
+</head>
+<body>
+  <!-- LOGIN -->
+  <div id="login">
+    <form id="loginForm" autocomplete="off">
+      <h1>Coach sign in</h1>
+      <p>Enter the meet admin password to edit the site.</p>
+      <label for="pw">Password</label>
+      <input id="pw" type="password" autofocus required />
+      <p class="err" id="loginErr"></p>
+      <button class="primary" style="width:100%;margin-top:.5rem" type="submit">Sign in</button>
+    </form>
+  </div>
+
+  <!-- APP -->
+  <div id="app">
+    <aside>
+      <h2>Timp Invitational</h2>
+      <nav id="nav"></nav>
+      <div class="logout"><button id="logoutBtn">Sign out</button></div>
+    </aside>
+    <main id="main"><div class="loading">Loading…</div></main>
+  </div>
+
+  <script type="module">
+    // ── API ──
+    async function api(action, { method = 'GET', body } = {}) {
+      const res = await fetch(`/api/admin?action=${action}`, {
+        method,
+        headers: body ? { 'Content-Type': 'application/json' } : undefined,
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      const data = await res.json().catch(() => ({}));
+      return { ok: res.ok, status: res.status, data };
+    }
+
+    // ── small DOM helper ──
+    function el(tag, props = {}, ...kids) {
+      const e = document.createElement(tag);
+      for (const [k, v] of Object.entries(props)) {
+        if (k === 'class') e.className = v;
+        else if (k.startsWith('on') && typeof v === 'function') e.addEventListener(k.slice(2), v);
+        else if (k in e) e[k] = v;
+        else e.setAttribute(k, v);
+      }
+      for (const c of kids.flat()) if (c != null && c !== false) e.append(c.nodeType ? c : document.createTextNode(c));
+      return e;
+    }
+
+    // ── content schemas (mirror the data files) ──
+    const t = (name, label, type = 'text', hint) => ({ name, label, type, hint });
+    const SECTIONS = [
+      { id: 'meet', label: 'Meet Details', path: 'src/data/meet.json', type: 'json', fields: [
+        t('year', 'Year', 'number'), t('tagline', 'Tagline'), t('heroBadge', 'Hero Badge'),
+        t('raceDate', 'Race Date (display)'), t('raceDateISO', 'Race Date (ISO — powers the countdown)', 'text', 'e.g. 2026-09-04T09:00:00-06:00'),
+        t('raceTime', 'Race Time'), t('venue', 'Venue Name'), t('venueShort', 'Venue (short)'),
+        t('address', 'Address'), t('distance', 'Distance'), t('sessions', 'Sessions'),
+        { name: 'registration', label: 'Registration', type: 'object', fields: [
+          t('am', 'AM RunnerCard URL'), t('pm', 'PM RunnerCard URL'), t('deadline', 'Deadline'),
+          t('deadlineTime', 'Deadline Time'), t('sessionLimit', 'Session Limit'),
+          t('entryFee', 'Entry Fee'), t('entryFeeSmall', 'Entry Fee (small)'), t('entriesNote', 'Entries Note') ] },
+        { name: 'stats', label: 'Stats Bar', type: 'list', item: { fields: [ t('num', 'Number'), t('label', 'Label') ] } },
+        t('course', 'Course Description', 'textarea'), t('courseMapCaption', 'Course Map Caption'),
+        { name: 'awards', label: 'Awards (one per item)', type: 'list', item: { type: 'text' } },
+        { name: 'fees', label: 'Fees', type: 'object', fields: [ t('standard', 'Standard Entry Text', 'textarea'), t('payment', 'Payment Text', 'textarea') ] },
+        { name: 'logistics', label: 'Parking / Logistics (one per item)', type: 'list', item: { type: 'text' } },
+        { name: 'about', label: 'About Paragraphs', type: 'list', item: { type: 'textarea' } },
+        { name: 'contact', label: 'Contact', type: 'object', fields: [
+          t('director', 'Director'), t('phone', 'Phone'), t('email', 'Email'), t('school', 'School'), t('schoolAddress', 'School Address', 'textarea') ] },
+        t('scoreboardUrl', 'Live Scoreboard URL'),
+      ] },
+      { id: 'schedule', label: 'Race Day Schedule', path: 'src/data/schedule.json', type: 'json', fields: [
+        { name: 'am', label: 'AM Session', type: 'list', item: { fields: [ t('time', 'Time'), t('event', 'Event'), t('varsity', 'Varsity', 'boolean') ] } },
+        { name: 'pm', label: 'PM Session', type: 'list', item: { fields: [ t('time', 'Time'), t('event', 'Event'), t('varsity', 'Varsity', 'boolean') ] } },
+      ] },
+      { id: 'records', label: 'Course Records', path: 'src/data/records.json', type: 'json', fields: [
+        { name: 'boys', label: 'Boys Course Record', type: 'object', fields: [ t('time', 'Time'), t('name', 'Name'), t('school', 'School') ] },
+        { name: 'girls', label: 'Girls Course Record', type: 'object', fields: [ t('time', 'Time'), t('name', 'Name'), t('school', 'School') ] },
+      ] },
+      { id: 'champions', label: 'Champions', path: 'src/data/champions.json', type: 'json', fields: [
+        { name: 'individual', label: 'Individual Champions', type: 'list', item: { fields: [
+          t('year', 'Year', 'number'), t('boysWinner', 'Boys Winner'), t('boysSchool', 'Boys School'), t('girlsWinner', 'Girls Winner'), t('girlsSchool', 'Girls School') ] } },
+        { name: 'team', label: 'Team Champions', type: 'list', item: { fields: [ t('year', 'Year', 'number'), t('boys', 'Boys Team'), t('girls', 'Girls Team') ] } },
+      ] },
+      { id: 'alumni', label: 'Notable Alumni', path: 'src/data/alumni.json', type: 'json', fields: [
+        { name: 'alumni', label: 'Alumni', type: 'list', item: { fields: [
+          t('name', 'Name'), t('school', 'School'), t('year', 'Year(s)'), t('badge', 'Badge (optional)'), t('bio', 'Bio', 'textarea') ] } },
+      ] },
+      { id: 'results', label: 'Past Results Archive', path: 'src/data/results-archive.json', type: 'json', fields: [
+        { name: 'years', label: 'Year Links', type: 'list', item: { fields: [ t('year', 'Year'), t('url', 'Results URL') ] } },
+      ] },
+      { id: 'news', label: 'News & Announcements', type: 'news' },
+    ];
+
+    // ── generic form rendering (mutates `obj` in place) ──
+    function scalarInput(field, value, onChange) {
+      if (field.type === 'boolean') {
+        const cb = el('input', { type: 'checkbox', checked: !!value, onchange: (e) => onChange(e.target.checked) });
+        return el('div', { class: 'checkbox' }, cb, el('span', {}, field.label || ''));
+      }
+      if (field.type === 'textarea') return el('textarea', { value: value ?? '', oninput: (e) => onChange(e.target.value) });
+      if (field.type === 'number') return el('input', { type: 'number', value: value ?? '', oninput: (e) => onChange(e.target.value === '' ? '' : Number(e.target.value)) });
+      return el('input', { type: 'text', value: value ?? '', oninput: (e) => onChange(e.target.value) });
+    }
+
+    function renderField(field, obj) {
+      if (field.type === 'object') {
+        if (typeof obj[field.name] !== 'object' || obj[field.name] == null) obj[field.name] = {};
+        const fs = el('fieldset', {}, el('legend', {}, field.label));
+        for (const f of field.fields) fs.append(renderField(f, obj[field.name]));
+        return fs;
+      }
+      if (field.type === 'list') return renderList(field, obj);
+      // scalar
+      const wrap = el('div', { class: 'field' });
+      if (field.type !== 'boolean') wrap.append(el('label', {}, field.label));
+      wrap.append(scalarInput(field, obj[field.name], (v) => { obj[field.name] = v; }));
+      if (field.hint) wrap.append(el('div', { class: 'hint' }, field.hint));
+      return wrap;
+    }
+
+    function renderList(field, obj) {
+      if (!Array.isArray(obj[field.name])) obj[field.name] = [];
+      const arr = obj[field.name];
+      const isScalar = !field.item.fields;
+      const itemsWrap = el('div', {});
+      const wrap = el('div', { class: 'field' },
+        el('div', { style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem' },
+          el('label', { style: 'margin:0' }, field.label),
+          el('button', { type: 'button', onclick: () => { arr.push(isScalar ? '' : {}); draw(); } }, '+ Add')),
+        itemsWrap);
+
+      function draw() {
+        itemsWrap.replaceChildren();
+        arr.forEach((item, i) => {
+          const card = el('div', { class: 'list-item' });
+          const tools = el('div', { class: 'row-tools' },
+            el('button', { type: 'button', title: 'Move up', disabled: i === 0, onclick: () => { [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]]; draw(); } }, '↑'),
+            el('button', { type: 'button', title: 'Move down', disabled: i === arr.length - 1, onclick: () => { [arr[i + 1], arr[i]] = [arr[i], arr[i + 1]]; draw(); } }, '↓'),
+            el('button', { type: 'button', class: 'danger', title: 'Remove', onclick: () => { arr.splice(i, 1); draw(); } }, '✕'));
+          card.append(tools);
+          if (isScalar) {
+            card.append(scalarInput(field.item, item, (v) => { arr[i] = v; }));
+          } else {
+            if (typeof arr[i] !== 'object' || arr[i] == null) arr[i] = {};
+            for (const f of field.item.fields) card.append(renderField(f, arr[i]));
+          }
+          itemsWrap.append(card);
+        });
+        if (!arr.length) itemsWrap.append(el('div', { class: 'hint' }, 'None yet — click “+ Add”.'));
+      }
+      draw();
+      return wrap;
+    }
+
+    // ── markdown frontmatter (news) ──
+    function parseMd(text) {
+      const data = { title: '', date: '', summary: '', draft: false };
+      let body = text || '';
+      const m = /^---\s*\n([\s\S]*?)\n---\s*\n?/.exec(text || '');
+      if (m) {
+        body = (text || '').slice(m[0].length);
+        for (const line of m[1].split('\n')) {
+          const mm = /^(\w+)\s*:\s*(.*)$/.exec(line);
+          if (!mm) continue;
+          let [, k, v] = mm; v = v.trim();
+          if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1, -1).replace(/\\"/g, '"');
+          if (k === 'draft') data.draft = v === 'true';
+          else if (k in data) data[k] = v;
+        }
+      }
+      return { data, body };
+    }
+    function buildMd({ title, date, summary, draft }, body) {
+      const q = (s) => `"${String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
+      let fm = `---\ntitle: ${q(title)}\ndate: ${date}\n`;
+      if (summary && summary.trim()) fm += `summary: ${q(summary)}\n`;
+      fm += `draft: ${draft ? 'true' : 'false'}\n---\n\n`;
+      return fm + (body || '').replace(/^\n+/, '');
+    }
+
+    // ── views ──
+    const loginEl = document.getElementById('login');
+    const appEl = document.getElementById('app');
+    const mainEl = document.getElementById('main');
+    const navEl = document.getElementById('nav');
+
+    function showApp() {
+      loginEl.style.display = 'none';
+      appEl.style.display = 'grid';
+      navEl.replaceChildren(...SECTIONS.map((s) =>
+        el('button', { type: 'button', 'data-id': s.id, onclick: () => openSection(s) }, s.label)));
+      openSection(SECTIONS[0]);
+    }
+    function setActiveNav(id) {
+      navEl.querySelectorAll('button').forEach((b) => b.classList.toggle('active', b.dataset.id === id));
+    }
+
+    async function openSection(section) {
+      setActiveNav(section.id);
+      mainEl.replaceChildren(el('div', { class: 'loading' }, 'Loading…'));
+      if (section.type === 'news') return openNews();
+      const { ok, data } = await api(`get&path=${encodeURIComponent(section.path)}`);
+      if (!ok) return mainEl.replaceChildren(el('div', { class: 'status bad' }, data.error || 'Failed to load.'));
+      let obj;
+      try { obj = JSON.parse(data.content); } catch { obj = {}; }
+      let sha = data.sha;
+
+      const form = el('div', {});
+      for (const f of section.fields) form.append(renderField(f, obj));
+
+      const status = el('span', { class: 'status' });
+      const saveBtn = el('button', { class: 'primary', type: 'button' }, 'Save changes');
+      saveBtn.onclick = async () => {
+        saveBtn.disabled = true; status.className = 'status'; status.textContent = 'Saving…';
+        const content = JSON.stringify(obj, null, 2) + '\n';
+        const res = await api('save', { method: 'POST', body: { path: section.path, content, sha, message: `Update ${section.label} via admin` } });
+        saveBtn.disabled = false;
+        if (res.ok) { sha = res.data.sha || sha; status.className = 'status ok'; status.textContent = 'Saved ✓ — live in ~1 min.'; }
+        else { status.className = 'status bad'; status.textContent = res.data.error || 'Save failed.'; }
+      };
+
+      mainEl.replaceChildren(
+        el('div', { class: 'head' }, el('h1', {}, section.label)),
+        form,
+        el('div', { class: 'save-bar' }, saveBtn, status));
+    }
+
+    async function openNews() {
+      const { ok, data } = await api('listNews');
+      if (!ok) return mainEl.replaceChildren(el('div', { class: 'status bad' }, data.error || 'Failed to load.'));
+      // Load each post's content to show title/date.
+      const posts = [];
+      for (const f of data.files) {
+        const r = await api(`get&path=${encodeURIComponent(f.path)}`);
+        const parsed = parseMd(r.data.content || '');
+        posts.push({ ...f, ...parsed.data, body: parsed.body, sha: r.data.sha });
+      }
+      posts.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+      const list = el('div', { class: 'news-list' },
+        ...posts.map((p) => el('div', { class: 'post', onclick: () => editPost(p) },
+          el('div', {}, el('strong', {}, p.title || p.name), el('div', { class: 'hint' }, p.date || '')),
+          el('span', { class: p.draft ? 'badge draft' : 'badge' }, p.draft ? 'Draft' : 'Published'))));
+      if (!posts.length) list.append(el('div', { class: 'hint' }, 'No posts yet.'));
+
+      mainEl.replaceChildren(
+        el('div', { class: 'head' }, el('h1', {}, 'News & Announcements'),
+          el('button', { class: 'primary', type: 'button', onclick: () => editPost(null) }, '+ New post')),
+        list);
+    }
+
+    function slugify(s) {
+      return (s || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'post';
+    }
+
+    function editPost(post) {
+      const isNew = !post;
+      const data = post ? { title: post.title, date: post.date, summary: post.summary, draft: post.draft } : { title: '', date: new Date().toISOString().slice(0, 10), summary: '', draft: false };
+      let body = post ? post.body : '';
+      let sha = post ? post.sha : null;
+      let path = post ? post.path : null;
+
+      const fTitle = el('input', { type: 'text', value: data.title, oninput: (e) => data.title = e.target.value });
+      const fSlug = el('input', { type: 'text', value: isNew ? '' : (path || '').replace('src/content/news/', '').replace('.md', ''), placeholder: 'auto from title', disabled: !isNew });
+      const fDate = el('input', { type: 'date', value: data.date, oninput: (e) => data.date = e.target.value });
+      const fSummary = el('textarea', { value: data.summary || '', oninput: (e) => data.summary = e.target.value });
+      const fDraft = el('input', { type: 'checkbox', checked: data.draft, onchange: (e) => data.draft = e.target.checked });
+      const fBody = el('textarea', { value: body, style: 'min-height:14rem', oninput: (e) => body = e.target.value });
+
+      const status = el('span', { class: 'status' });
+      const saveBtn = el('button', { class: 'primary', type: 'button' }, 'Save post');
+      saveBtn.onclick = async () => {
+        if (!data.title.trim()) { status.className = 'status bad'; status.textContent = 'Title is required.'; return; }
+        if (!data.date) { status.className = 'status bad'; status.textContent = 'Date is required.'; return; }
+        const p = isNew ? `src/content/news/${slugify(fSlug.value || data.title)}.md` : path;
+        saveBtn.disabled = true; status.className = 'status'; status.textContent = 'Saving…';
+        const res = await api('save', { method: 'POST', body: { path: p, content: buildMd(data, body), sha, message: `${isNew ? 'Add' : 'Update'} news post: ${data.title}` } });
+        saveBtn.disabled = false;
+        if (res.ok) { status.className = 'status ok'; status.textContent = 'Saved ✓ — live in ~1 min.'; setTimeout(openNews, 900); }
+        else { status.className = 'status bad'; status.textContent = res.data.error || 'Save failed.'; }
+      };
+
+      const tools = [el('button', { type: 'button', onclick: openNews }, '← Back'), saveBtn];
+      if (!isNew) {
+        const del = el('button', { class: 'danger', type: 'button' }, 'Delete');
+        del.onclick = async () => {
+          if (!confirm('Delete this post? This cannot be undone from here.')) return;
+          del.disabled = true;
+          const res = await api('delete', { method: 'POST', body: { path, sha, message: `Delete news post: ${data.title}` } });
+          if (res.ok) openNews(); else { del.disabled = false; status.className = 'status bad'; status.textContent = res.data.error || 'Delete failed.'; }
+        };
+        tools.push(del);
+      }
+
+      const fieldWrap = (label, input, hint) => el('div', { class: 'field' }, el('label', {}, label), input, hint ? el('div', { class: 'hint' }, hint) : null);
+      mainEl.replaceChildren(
+        el('div', { class: 'head' }, el('h1', {}, isNew ? 'New post' : 'Edit post')),
+        fieldWrap('Title', fTitle),
+        fieldWrap('Slug (file name)', fSlug, isNew ? 'Leave blank to auto-generate from the title. Cannot be changed later.' : 'Fixed once created.'),
+        fieldWrap('Date (newest shows first)', fDate),
+        fieldWrap('Summary (optional)', fSummary),
+        el('div', { class: 'field checkbox' }, fDraft, el('span', {}, 'Draft (hide from the site)')),
+        fieldWrap('Body (Markdown)', fBody),
+        el('div', { class: 'save-bar' }, ...tools, status));
+    }
+
+    // ── boot ──
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errEl = document.getElementById('loginErr');
+      errEl.textContent = '';
+      const res = await api('login', { method: 'POST', body: { password: document.getElementById('pw').value } });
+      if (res.ok) showApp();
+      else errEl.textContent = res.data.error || 'Incorrect password.';
+    });
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await api('logout', { method: 'POST' });
+      location.reload();
+    });
+
+    (async () => {
+      const { data } = await api('session');
+      if (data.authed) showApp();
+      else { loginEl.style.display = 'grid'; document.getElementById('pw').focus(); }
+    })();
+  </script>
+</body>
 </html>
