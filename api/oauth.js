@@ -130,19 +130,26 @@ export default async function handler(req, res) {
   // the admin login is confirmed working.
   const url = new URL(req.url || '/', 'http://localhost');
   if (req.method === 'GET' && url.searchParams.get('diag') === '1') {
+    const ghHeaders = {
+      Authorization: `Bearer ${githubToken}`,
+      Accept: 'application/vnd.github+json',
+      'User-Agent': 'timpinvite-admin',
+    };
     let repoStatus = 0;
     let message = '';
+    let permissions = null;
+    let userStatus = 0;
+    let login = '';
     try {
-      const r = await fetch('https://api.github.com/repos/BDME132/timpanogos-invitational', {
-        headers: {
-          Authorization: `Bearer ${githubToken}`,
-          Accept: 'application/vnd.github+json',
-          'User-Agent': 'timpinvite-admin',
-        },
-      });
+      const r = await fetch('https://api.github.com/repos/BDME132/timpanogos-invitational', { headers: ghHeaders });
       repoStatus = r.status;
       const body = await r.json().catch(() => ({}));
       message = body.message || body.full_name || '';
+      permissions = body.permissions || null;
+      const u = await fetch('https://api.github.com/user', { headers: ghHeaders });
+      userStatus = u.status;
+      const ub = await u.json().catch(() => ({}));
+      login = ub.login || ub.message || '';
     } catch (e) {
       message = `fetch failed: ${e.message}`;
     }
@@ -156,6 +163,9 @@ export default async function handler(req, res) {
       tokenLength: githubToken.length,
       repoStatus,
       message,
+      permissions,
+      userStatus,
+      login,
     }, null, 2));
     return;
   }
