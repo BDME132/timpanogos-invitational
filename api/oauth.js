@@ -90,22 +90,18 @@ function successPage(token) {
 <html lang="en">
 <head><meta charset="utf-8" /><meta name="robots" content="noindex" /><title>Signing in…</title></head>
 <body>
-  <p>Signing in…</p>
+  <p>Signing in… you can close this window.</p>
   <script>
-    (function () {
-      var payload = ${JSON.stringify(payload)};
-      function receive(e) {
-        // Reply to the CMS's handshake. Only require that it comes from our own
-        // origin (the CMS window); don't filter on message content — matches the
-        // reference sveltia-cms-auth client.
-        if (e.origin !== window.location.origin) return;
-        window.removeEventListener('message', receive, false);
-        window.opener.postMessage('authorization:${PROVIDER}:success:' + payload, e.origin);
-        window.close();
-      }
-      window.addEventListener('message', receive, false);
-      // Kick off the handshake.
-      window.opener && window.opener.postMessage('authorizing:${PROVIDER}', '*');
+    // Replicates the reference sveltia-cms-auth handshake exactly: announce, then
+    // when the CMS echoes 'authorizing:github' back, reply to its origin with the token.
+    (() => {
+      const payload = ${JSON.stringify(payload)};
+      window.addEventListener('message', ({ data, origin }) => {
+        if (data === 'authorizing:${PROVIDER}') {
+          window.opener?.postMessage('authorization:${PROVIDER}:success:' + payload, origin);
+        }
+      });
+      window.opener?.postMessage('authorizing:${PROVIDER}', '*');
     })();
   </script>
 </body>
