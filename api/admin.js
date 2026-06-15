@@ -63,9 +63,16 @@ function getCookie(req, name) {
   const m = (req.headers.cookie || '').match(new RegExp(`(?:^|; )${name}=([^;]*)`));
   return m ? decodeURIComponent(m[1]) : '';
 }
-function setSessionCookie(res, value, maxAgeSec) {
+function shouldUseSecureCookie(req) {
+  const host = req.headers.host || '';
+  const proto = req.headers['x-forwarded-proto'];
+  return proto === 'https' || (!host.startsWith('localhost') && !host.startsWith('127.0.0.1'));
+}
+
+function setSessionCookie(req, res, value, maxAgeSec) {
+  const secure = shouldUseSecureCookie(req) ? '; Secure' : '';
   res.setHeader('Set-Cookie',
-    `${COOKIE}=${value}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${maxAgeSec}`);
+    `${COOKIE}=${value}; HttpOnly${secure}; SameSite=Lax; Path=/; Max-Age=${maxAgeSec}`);
 }
 
 async function readJson(req) {
@@ -92,14 +99,18 @@ function ghHeaders() {
 }
 async function ghGetFile(path) {
   const r = await fetch(`${GH}/repos/${REPO}/contents/${path}?ref=${BRANCH}`, { headers: ghHeaders() });
-  if (r.status === 404) return { status: 404, content: '', sha: null };
-  const j = await r.json();
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) return { status: r.status, error: j.message || `GitHub read failed (${r.status}).` };
   return { status: r.status, content: j.content ? Buffer.from(j.content, 'base64').toString('utf8') : '', sha: j.sha || null };
 }
 async function ghList(dir) {
   const r = await fetch(`${GH}/repos/${REPO}/contents/${dir}?ref=${BRANCH}`, { headers: ghHeaders() });
-  const j = await r.json();
-  return Array.isArray(j) ? j.filter((f) => f.type === 'file').map((f) => ({ name: f.name, path: f.path, sha: f.sha })) : [];
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) return { status: r.status, error: j.message || `GitHub list failed (${r.status}).`, files: [] };
+  return {
+    status: r.status,
+    files: Array.isArray(j) ? j.filter((f) => f.type === 'file').map((f) => ({ name: f.name, path: f.path, sha: f.sha })) : [],
+  };
 }
 async function ghPut(path, contentStr, message, sha) {
   const body = { message, content: Buffer.from(contentStr, 'utf8').toString('base64'), branch: BRANCH };
@@ -151,14 +162,14 @@ export default async function handler(req, res) {
   if (action === 'login' && req.method === 'POST') {
     const { password } = await readJson(req);
     if (passwordMatches(password)) {
-      setSessionCookie(res, makeSession(), SESSION_TTL_MS / 1000);
+      setSessionCookie(req, res, makeSession(), SESSION_TTL_MS / 1000);
       return sendJson(res, 200, { ok: true });
     }
     await new Promise((r) => setTimeout(r, 600));
     return sendJson(res, 401, { ok: false, error: 'Incorrect password.' });
   }
   if (action === 'logout' && req.method === 'POST') {
-    setSessionCookie(res, '', 0);
+    setSessionCookie(req, res, '', 0);
     return sendJson(res, 200, { ok: true });
   }
 
@@ -169,11 +180,13 @@ export default async function handler(req, res) {
     const path = url.searchParams.get('path') || '';
     if (!allowedPath(path)) return sendJson(res, 400, { error: 'Path not allowed.' });
     const file = await ghGetFile(path);
+    if (file.status >= 400) return sendJson(res, file.status, { error: file.error || 'Failed to load file.' });
     return sendJson(res, 200, { content: file.content, sha: file.sha });
   }
   if (action === 'listNews' && req.method === 'GET') {
-    const files = (await ghList('src/content/news')).filter((f) => f.name.endsWith('.md'));
-    return sendJson(res, 200, { files });
+    const out = await ghList('src/content/news');
+    if (out.status >= 400) return sendJson(res, out.status, { error: out.error || 'Failed to load news.' });
+    return sendJson(res, 200, { files: out.files.filter((f) => f.name.endsWith('.md')) });
   }
   if (action === 'save' && req.method === 'POST') {
     const { path, content, message, sha } = await readJson(req);
