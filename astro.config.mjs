@@ -2,8 +2,7 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  // Update this to your actual Vercel URL once deployed
-  site: 'https://timpanogos-invitational.vercel.app',
+  site: 'https://www.timpinvite.com',
   trailingSlash: 'ignore',
   output: 'static',
   build: {
