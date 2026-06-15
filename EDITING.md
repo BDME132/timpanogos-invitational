@@ -14,7 +14,7 @@ no account to create. After that, you just log in whenever you want to make a ch
 
 ## Making a change
 
-1. Go to **https://timpanogos-invitational.vercel.app/admin/**
+1. Go to **https://www.timpinvite.com/admin/**
 2. Click **Sign in**, then enter the admin password.
 3. You'll see the content sections in a menu. Pick what you want to change:
 
@@ -30,7 +30,7 @@ no account to create. After that, you just log in whenever you want to make a ch
 
 4. Edit the fields, then click **Save** / **Publish**.
 5. Wait about a minute, then refresh the live site —
-   **https://timpanogos-invitational.vercel.app/** — to see your change.
+   **https://www.timpinvite.com/** — to see your change.
 
 ---
 

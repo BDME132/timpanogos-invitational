@@ -4,8 +4,8 @@ A mostly-static [Astro](https://astro.build/) site for the Timpanogos Invitation
 meet. It builds to plain HTML and deploys to **Vercel**, with one small serverless function that
 powers the password-protected admin.
 
-- **Live site:** https://timpanogos-invitational.vercel.app/
-- **Admin (content editor):** https://timpanogos-invitational.vercel.app/admin/
+- **Live site:** https://www.timpinvite.com/
+- **Admin (content editor):** https://www.timpinvite.com/admin/
 - **Repo:** `BDME132/timpanogos-invitational`
 
 There is **no database**. Content edits are made through the admin page (or by editing the data
