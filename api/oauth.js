@@ -137,6 +137,8 @@ export default async function handler(req, res) {
     let permissions = null;
     let userStatus = 0;
     let login = '';
+    let graphqlStatus = 0;
+    let graphqlResult = '';
     try {
       const r = await fetch('https://api.github.com/repos/BDME132/timpanogos-invitational', { headers: ghHeaders });
       repoStatus = r.status;
@@ -147,6 +149,16 @@ export default async function handler(req, res) {
       userStatus = u.status;
       const ub = await u.json().catch(() => ({}));
       login = ub.login || ub.message || '';
+      // Sveltia uses the GraphQL API — test it the same way the CMS would.
+      const gq = await fetch('https://api.github.com/graphql', {
+        method: 'POST',
+        headers: { ...ghHeaders, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: 'query { viewer { login } repository(owner: "BDME132", name: "timpanogos-invitational") { viewerPermission } }',
+        }),
+      });
+      graphqlStatus = gq.status;
+      graphqlResult = JSON.stringify(await gq.json().catch(() => ({}))).slice(0, 400);
     } catch (e) {
       message = `fetch failed: ${e.message}`;
     }
@@ -163,6 +175,8 @@ export default async function handler(req, res) {
       permissions,
       userStatus,
       login,
+      graphqlStatus,
+      graphqlResult,
     }, null, 2));
     return;
   }
