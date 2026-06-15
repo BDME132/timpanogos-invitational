@@ -1,7 +1,7 @@
 {
   "year": 2026,
   "tagline": "Cross Country Championship",
-  "heroBadge": "Est. 2010 · Lakeside Park, Orem, Utah",
+  "heroBadge": "Est. 2010 · Lakeside Park, Vineyard, Utah",
   "raceDate": "September 4, 2026",
   "raceDateISO": "2026-09-04T09:00:00-06:00",
   "raceTime": "9:00 AM",
@@ -21,11 +21,26 @@
     "entriesNote": "Unlimited entries per team — each athlete may enter 1 event"
   },
   "stats": [
-    { "num": "16", "label": "Years of Competition" },
-    { "num": "80", "label": "Teams in the Meet" },
-    { "num": "5K", "label": "99% Grass Course" },
-    { "num": "2",  "label": "Sessions · AM & PM" },
-    { "num": "45", "label": "Teams Per Session Max" }
+    {
+      "num": "16",
+      "label": "Years of Competition"
+    },
+    {
+      "num": "80",
+      "label": "Teams in the Meet"
+    },
+    {
+      "num": "5K",
+      "label": "99% Grass Course"
+    },
+    {
+      "num": "2",
+      "label": "Sessions · AM & PM"
+    },
+    {
+      "num": "45",
+      "label": "Teams Per Session Max"
+    }
   ],
   "course": "The Timpanogos Invitational course is a true racer's dream — 3.1 miles of speed set beneath the stunning backdrop of Mt. Timpanogos. The course is 99% grass with minimal concrete, flat and fast, purpose-built for personal bests and breakthrough performances.",
   "courseMapCaption": "LAKESIDE PARK · 1850 W 400 S · OREM, UTAH",
