@@ -445,6 +445,12 @@ section { padding: 5rem 2rem; }
   border: 1px dashed rgba(255,255,255,0.1);
 }
 
+.course-map-embed {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* fees */
 .fees-card {
   background: rgba(255,255,255,0.04);

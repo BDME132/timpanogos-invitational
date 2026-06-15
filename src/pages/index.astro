@@ -11,7 +11,6 @@ const resultsArchive = resultsArchiveData.years;
 import { getCollection } from 'astro:content';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const logoUrl = `${base}/logo.jpg`;
 
 const news = (await getCollection('news', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime()
@@ -24,7 +23,7 @@ const ccPhoneDigits = '8016108175';
 <Layout>
   <!-- NAV -->
   <nav>
-    <a href="#home"><img src={logoUrl} alt="Timpanogos Invitational" class="nav-logo-img" /></a>
+    <a href="#home" class="nav-logo">Timpanogos <span>Invitational</span></a>
     <ul class="nav-links" id="navLinks">
       <a href="#home">Home</a>
       <a href="#info">Race Info</a>
@@ -51,8 +50,6 @@ const ccPhoneDigits = '8016108175';
     </svg>
 
     <div class="hero-year-badge">{meet.heroBadge}</div>
-
-    <img src={logoUrl} alt="Timpanogos Invitational" class="hero-logo-img" />
 
     <h1 class="hero-title">
       Timpanogos<br /><span class="accent">Invitational</span>
@@ -189,7 +186,11 @@ const ccPhoneDigits = '8016108175';
             <h3>The Course</h3>
             <p>{meet.course}</p>
             <div class="course-map-container" style="margin-top:1rem;">
-              <div class="course-map-placeholder">[Course Map — Replace with image]</div>
+              <img
+                src={`${base}/timpinvitemap.png`}
+                alt="Timpanogos Invitational Cross Country Course Map"
+                class="course-map-embed"
+              />
               <p style="font-size:0.75rem;color:rgba(255,255,255,0.3);margin-top:0.5rem;font-family:'Oswald',sans-serif;letter-spacing:0.1em;">
                 {meet.courseMapCaption}
               </p>
