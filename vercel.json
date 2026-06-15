@@ -1,7 +1,0 @@
-{
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [
-    { "source": "/auth", "destination": "/api/oauth" },
-    { "source": "/oauth/authorize", "destination": "/api/oauth" }
-  ]
-}

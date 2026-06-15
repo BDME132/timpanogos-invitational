@@ -15,8 +15,8 @@ no account to create. After that, you just log in whenever you want to make a ch
 ## Making a change
 
 1. Go to **https://www.timpinvite.com/admin/**
-2. Click **Sign in**, then enter the admin password.
-3. You'll see the content sections in a menu. Pick what you want to change:
+2. Enter the admin password and click **Sign in**.
+3. You'll see the content sections in the left-hand menu. Pick what you want to change:
 
    | Section | What it controls |
    |---------|------------------|
@@ -28,7 +28,8 @@ no account to create. After that, you just log in whenever you want to make a ch
    | **Notable Alumni** | The alumni cards. |
    | **Past Results Archive** | The list of year links in the Results section. |
 
-4. Edit the fields, then click **Save** / **Publish**.
+4. Edit the fields, then click **Save**. (In a list — schedule, champions, etc. — use **+ Add**,
+   the **✕** to remove a row, and the **↑ / ↓** arrows to reorder.)
 5. Wait about a minute, then refresh the live site —
    **https://www.timpinvite.com/** — to see your change.
 
