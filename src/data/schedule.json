@@ -1,23 +1,91 @@
 {
   "am": [
-    { "time": "8:00 AM",  "event": "Packet Pick Up",       "varsity": false },
-    { "time": "9:00",     "event": "Frosh/Soph Girls",     "varsity": false },
-    { "time": "9:20",     "event": "Frosh Boys",           "varsity": false },
-    { "time": "9:40",     "event": "Soph Boys",            "varsity": false },
-    { "time": "10:00",    "event": "⭑ Varsity Girls",      "varsity": true  },
-    { "time": "10:30",    "event": "⭑ Varsity Boys",       "varsity": true  },
-    { "time": "11:00",    "event": "Junior/Senior Girls",  "varsity": false },
-    { "time": "11:30",    "event": "Junior Boys",          "varsity": false },
-    { "time": "11:50",    "event": "Senior Boys",          "varsity": false },
-    { "time": "12:15",    "event": "Awards Ceremony",      "varsity": false }
+    {
+      "time": "8:00 AM",
+      "event": "Packet Pick Up",
+      "varsity": false
+    },
+    {
+      "time": "9:00",
+      "event": "JV Senior Boys",
+      "varsity": false
+    },
+    {
+      "time": "9:20",
+      "event": "JV Junior/Senior Girls",
+      "varsity": false
+    },
+    {
+      "time": "9:40",
+      "event": "JV Junior Boys",
+      "varsity": false
+    },
+    {
+      "time": "10:00",
+      "event": "⭑ Varsity Girls",
+      "varsity": true
+    },
+    {
+      "time": "10:30",
+      "event": "⭑ Varsity Boys",
+      "varsity": true
+    },
+    {
+      "time": "11:00",
+      "event": "Sophomore Boys",
+      "varsity": false
+    },
+    {
+      "time": "11:30",
+      "event": "Freshman/Sophomore Girls",
+      "varsity": false
+    },
+    {
+      "time": "11:50",
+      "event": "Freshman Boys",
+      "varsity": false
+    },
+    {
+      "time": "11:15",
+      "event": "Varsity Awards Ceremony",
+      "varsity": false
+    }
   ],
   "pm": [
-    { "time": "2:00 PM",  "event": "Packet Pick Up",       "varsity": false },
-    { "time": "3:00",     "event": "Frosh/Soph Girls",     "varsity": false },
-    { "time": "3:30",     "event": "Frosh/Soph Boys",      "varsity": false },
-    { "time": "4:00",     "event": "⭑ Varsity Girls",      "varsity": true  },
-    { "time": "4:30",     "event": "⭑ Varsity Boys",       "varsity": true  },
-    { "time": "5:00",     "event": "Junior/Senior Girls",  "varsity": false },
-    { "time": "5:30",     "event": "Junior/Senior Boys",   "varsity": false }
+    {
+      "time": "2:00 PM",
+      "event": "Packet Pick Up",
+      "varsity": false
+    },
+    {
+      "time": "3:00",
+      "event": "Frosh/Soph Girls",
+      "varsity": false
+    },
+    {
+      "time": "3:30",
+      "event": "Frosh/Soph Boys",
+      "varsity": false
+    },
+    {
+      "time": "4:00",
+      "event": "⭑ Varsity Girls",
+      "varsity": true
+    },
+    {
+      "time": "4:30",
+      "event": "⭑ Varsity Boys",
+      "varsity": true
+    },
+    {
+      "time": "5:00",
+      "event": "Junior/Senior Girls",
+      "varsity": false
+    },
+    {
+      "time": "5:30",
+      "event": "Junior/Senior Boys",
+      "varsity": false
+    }
   ]
 }
