@@ -2,8 +2,8 @@
   "year": 2026,
   "tagline": "Cross Country Championship",
   "heroBadge": "Est. 2010 · Lakeside Park, Orem, Utah",
-  "raceDate": "September 4, 2026",
-  "raceDateISO": "2026-09-04T09:00:00-06:00",
+  "raceDate": "September 3, 2027",
+  "raceDateISO": "2027-09-03T09:00:00-06:00",
   "raceTime": "9:00 AM",
   "venue": "Lakeside Park",
   "venueShort": "Lakeside Park · Vineyard, UT",
@@ -13,20 +13,20 @@
   "registration": {
     "am": "https://www.runnercard.com/e/runner.Main?meet=1005412",
     "pm": "https://www.runnercard.com/e/runner.Main?meet=1005413",
-    "deadline": "Tuesday, September 1, 2026",
+    "deadline": "Tuesday, August 31, 2027",
     "deadlineTime": "10:00 PM",
-    "sessionLimit": "45 teams max per session",
+    "sessionLimit": "50 teams max per session",
     "entryFee": "$350 per school (boys + girls)",
     "entryFeeSmall": "$175 for 10 or fewer athletes",
     "entriesNote": "Unlimited entries per team — each athlete may enter 1 event"
   },
   "stats": [
     {
-      "num": "16",
+      "num": "17",
       "label": "Years of Competition"
     },
     {
-      "num": "80",
+      "num": "105",
       "label": "Teams in the Meet"
     },
     {
@@ -34,11 +34,11 @@
       "label": "99% Grass Course"
     },
     {
-      "num": "2",
-      "label": "Sessions · AM & PM"
+      "num": "3",
+      "label": "Sessions · AM & PM & Jr. High"
     },
     {
-      "num": "45",
+      "num": "50",
       "label": "Teams Per Session Max"
     }
   ],
@@ -50,7 +50,7 @@
     "Live scoreboard at sb3.runnercard.com"
   ],
   "fees": {
-    "standard": "$175 per boys' or girls' team · $350 total per school\nSchools with 10 or fewer total athletes: $175 flat\nIndividual (no team): $10 per athlete\n100+ athletes: $5/athlete over 100\nLate entries: $10 per athlete",
+    "standard": "$175 per boys' or girls' team · $350 total per school\nSchools with 10 or fewer total athletes: $175 flat\nIndividual (no team): $20 per athlete\n60+ athletes: $5/athlete over 100\nLate entries: $25 per athlete",
     "payment": "Checks payable to Timpanogos High School\nBring day-of or mail to: 1450 N. 200 E, Orem, UT 84057\nCredit card: Call 801-610-8175 ext. 365\nOnline: myschoolfees.com → Timpanogos High"
   },
   "logistics": [
@@ -64,7 +64,7 @@
     "The Timpanogos Invitational has been one of Utah's premier high school cross country invitationals since its founding in 2010. Held each fall at Lakeside Park in Vineyard, Utah, the meet has grown into a destination event drawing 80+ teams and some of the nation's finest distance talent.",
     "The course is legendary among Utah runners: 3.1 miles of fast, flat, 99% grass running purpose-built for personal bests. Year after year, athletes arrive chasing breakthrough performances, and many find them here.",
     "The meet's alumni roll reads like a who's-who of elite American distance running. National Champion Jackson Spencer set the course record here. National Record Holder Jane Hedengren of Timpview has dominated the girls race. The Timpanogos Invitational is where great teams race, champions compete, and memories are made.",
-    "Organized by Timpanogos High School and directed by Jody Benson, the meet prides itself on a well-run, athlete-first experience. In 2026, two sessions — AM and PM — will allow even more teams to compete while maintaining the high standard the invitational is known for."
+    "Organized by Timpanogos High School and directed by Jody Benson, the meet prides itself on a well-run, athlete-first experience. In 2027, two sessions — AM and PM — will allow even more teams to compete while maintaining the high standard the invitational is known for."
   ],
   "contact": {
     "director": "Jody Benson",
