@@ -1,32 +1,174 @@
 {
   "individual": [
-    { "year": 2025, "boysWinner": "Jackson Spencer",   "boysSchool": "Herriman",        "girlsWinner": "Bridget Smit",     "girlsSchool": "Brighton" },
-    { "year": 2024, "boysWinner": "Kaden Evans",       "boysSchool": "American Fork",   "girlsWinner": "Jane Hedengren",   "girlsSchool": "Timpview" },
-    { "year": 2023, "boysWinner": "Daniel Simmons",    "boysSchool": "American Fork",   "girlsWinner": "Adria Favero",     "girlsSchool": "Olympus" },
-    { "year": 2022, "boysWinner": "Tayson Echohawk",   "boysSchool": "Orem",            "girlsWinner": "Avalon Mecham",    "girlsSchool": "American Fork" },
-    { "year": 2021, "boysWinner": "Jayden Fitzgerald", "boysSchool": "American Fork",   "girlsWinner": "Addi Bruening",    "girlsSchool": "Herriman" },
-    { "year": 2020, "boysWinner": "Brayden Packard",   "boysSchool": "American Fork",   "girlsWinner": "Caila Odekirk",    "girlsSchool": "Hurricane" },
-    { "year": 2019, "boysWinner": "Christopher Korir", "boysSchool": "Wasatch Academy", "girlsWinner": "Eliza Mason",      "girlsSchool": "Lone Peak" },
-    { "year": 2018, "boysWinner": "Drake DeHaan",      "boysSchool": "West Jordan",     "girlsWinner": "Helena Miyazawa",  "girlsSchool": "Mountain View" },
-    { "year": 2017, "boysWinner": "Justin Hartshorn",  "boysSchool": "Lone Peak",       "girlsWinner": "Helena Miyazawa",  "girlsSchool": "Mountain View" },
-    { "year": 2016, "boysWinner": "Joseph Benson",     "boysSchool": "Timpanogos",      "girlsWinner": "Madison Moffitt",  "girlsSchool": "Timpanogos" },
-    { "year": 2015, "boysWinner": "William Handley",   "boysSchool": "Timpanogos",      "girlsWinner": "Britney Lund",     "girlsSchool": "Maple Mountain" },
-    { "year": 2014, "boysWinner": "Dakota Lange",      "boysSchool": "Payson",          "girlsWinner": "Lucy Biles",       "girlsSchool": "Herriman" },
-    { "year": 2013, "boysWinner": "Rory Linkletter",   "boysSchool": "Herriman",        "girlsWinner": "Lucy Biles",       "girlsSchool": "Herriman" }
+    {
+      "year": 2026,
+      "boysWinner": "Trevin Lounsbury",
+      "boysSchool": "Herriman, UT",
+      "girlsWinner": "Avery Barton",
+      "girlsSchool": "Ogden, UT"
+    },
+    {
+      "year": 2025,
+      "boysWinner": "Jackson Spencer",
+      "boysSchool": "Herriman, UT",
+      "girlsWinner": "Bridget Smit",
+      "girlsSchool": "Brighton, UT"
+    },
+    {
+      "year": 2024,
+      "boysWinner": "Kaden Evans",
+      "boysSchool": "American Fork, UT",
+      "girlsWinner": "Jane Hedengren",
+      "girlsSchool": "Timpview, UT"
+    },
+    {
+      "year": 2023,
+      "boysWinner": "Daniel Simmons",
+      "boysSchool": "American Fork, UT",
+      "girlsWinner": "Adria Favero",
+      "girlsSchool": "Olympus, UT"
+    },
+    {
+      "year": 2022,
+      "boysWinner": "Tayson Echohawk",
+      "boysSchool": "Orem, UT",
+      "girlsWinner": "Avalon Mecham",
+      "girlsSchool": "American Fork, UT"
+    },
+    {
+      "year": 2021,
+      "boysWinner": "Jayden Fitzgerald",
+      "boysSchool": "American Fork, UT",
+      "girlsWinner": "Addi Bruening",
+      "girlsSchool": "Herriman, UT"
+    },
+    {
+      "year": 2020,
+      "boysWinner": "Brayden Packard",
+      "boysSchool": "American Fork, UT",
+      "girlsWinner": "Caila Odekirk",
+      "girlsSchool": "Hurricane, UT"
+    },
+    {
+      "year": 2019,
+      "boysWinner": "Christopher Korir",
+      "boysSchool": "Wasatch Academy, UT",
+      "girlsWinner": "Eliza Mason",
+      "girlsSchool": "Lone Peak, UT"
+    },
+    {
+      "year": 2018,
+      "boysWinner": "Drake DeHaan",
+      "boysSchool": "West Jordan, UT",
+      "girlsWinner": "Helena Miyazawa",
+      "girlsSchool": "Mountain View, UT"
+    },
+    {
+      "year": 2017,
+      "boysWinner": "Justin Hartshorn",
+      "boysSchool": "Lone Peak, UT",
+      "girlsWinner": "Helena Miyazawa",
+      "girlsSchool": "Mountain View, UT"
+    },
+    {
+      "year": 2016,
+      "boysWinner": "Joseph Benson",
+      "boysSchool": "Timpanogos, UT",
+      "girlsWinner": "Madison Moffitt",
+      "girlsSchool": "Timpanogos, UT"
+    },
+    {
+      "year": 2015,
+      "boysWinner": "William Handley",
+      "boysSchool": "Timpanogos, UT",
+      "girlsWinner": "Britney Lund",
+      "girlsSchool": "Maple Mountain, UT"
+    },
+    {
+      "year": 2014,
+      "boysWinner": "Dakota Lange",
+      "boysSchool": "Payson, UT",
+      "girlsWinner": "Lucy Biles",
+      "girlsSchool": "Herriman, UT"
+    },
+    {
+      "year": 2013,
+      "boysWinner": "Rory Linkletter",
+      "boysSchool": "Herriman, UT",
+      "girlsWinner": "Lucy Biles",
+      "girlsSchool": "Herriman, UT"
+    }
   ],
   "team": [
-    { "year": 2025, "boys": "American Fork", "girls": "Lone Peak" },
-    { "year": 2024, "boys": "Herriman",      "girls": "Lone Peak" },
-    { "year": 2023, "boys": "Herriman",      "girls": "Lone Peak" },
-    { "year": 2022, "boys": "Herriman",      "girls": "American Fork" },
-    { "year": 2021, "boys": "Mountain View", "girls": "American Fork" },
-    { "year": 2020, "boys": "American Fork", "girls": "American Fork" },
-    { "year": 2019, "boys": "Timpanogos",    "girls": "Lone Peak" },
-    { "year": 2018, "boys": "Lone Peak",     "girls": "Lone Peak" },
-    { "year": 2017, "boys": "Timpanogos",    "girls": "Lone Peak" },
-    { "year": 2016, "boys": "Timpanogos",    "girls": "Timpanogos" },
-    { "year": 2015, "boys": "Timpanogos",    "girls": "Timpview" },
-    { "year": 2014, "boys": "Timpanogos",    "girls": "Herriman" },
-    { "year": 2013, "boys": "Timpanogos",    "girls": "Timpanogos" }
+    {
+      "year": 2026,
+      "boys": "American Fork, UT",
+      "girls": "Herriman, UT"
+    },
+    {
+      "year": 2025,
+      "boys": "American Fork, UT",
+      "girls": "Lone Peak, UT"
+    },
+    {
+      "year": 2024,
+      "boys": "Herriman, UT",
+      "girls": "Lone Peak, UT"
+    },
+    {
+      "year": 2023,
+      "boys": "Herriman, UT",
+      "girls": "Lone Peak, UT"
+    },
+    {
+      "year": 2022,
+      "boys": "Herriman, UT",
+      "girls": "American Fork, UT"
+    },
+    {
+      "year": 2021,
+      "boys": "Mountain View, UT",
+      "girls": "American Fork, UT"
+    },
+    {
+      "year": 2020,
+      "boys": "American Fork, UT",
+      "girls": "American Fork, UT"
+    },
+    {
+      "year": 2019,
+      "boys": "Timpanogos, UT",
+      "girls": "Lone Peak, UT"
+    },
+    {
+      "year": 2018,
+      "boys": "Lone Peak, UT",
+      "girls": "Lone Peak, UT"
+    },
+    {
+      "year": 2017,
+      "boys": "Timpanogos, UT",
+      "girls": "Lone Peak, UT"
+    },
+    {
+      "year": 2016,
+      "boys": "Timpanogos, UT",
+      "girls": "Timpanogos, UT"
+    },
+    {
+      "year": 2015,
+      "boys": "Timpanogos, UT",
+      "girls": "Timpview, UT"
+    },
+    {
+      "year": 2014,
+      "boys": "Timpanogos, UT",
+      "girls": "Herriman, UT"
+    },
+    {
+      "year": 2013,
+      "boys": "Timpanogos, UT",
+      "girls": "Timpanogos, UT"
+    }
   ]
 }
